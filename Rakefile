@@ -14,13 +14,13 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
-  gem.name = "rspec_html_formatter"
-  gem.homepage = "http://github.com/kingsleyh/rspec_reports_formatter"
+  gem.name = "rspec_page_regression_html_formatter"
+  gem.homepage = "https://github.com/abersager/rspec-page-regression-html-formatter"
   gem.license = "MIT"
-  gem.summary = %Q{Rspec custom formatter to generate pretty html results}
-  gem.description = %Q{Rspec custom formatter to generate pretty html results}
-  gem.email = "kingsleyhendrickse@me.com"
-  gem.authors = ["Kingsley Hendrickse"]
+  gem.summary = %Q{Custom HTML formatter for rspec-page-regression to allow visual comparison}
+  gem.description = %Q{Custom HTML formatter for rspec-page-regression to allow visual comparison}
+  gem.email = "os@oliverspindler.com"
+  gem.authors = ["Kingsley Hendrickse", "Oliver Spindler"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
@@ -44,7 +44,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "rspec_html_formatter #{version}"
+  rdoc.title = "rspec_page_regression_html_formatter #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
