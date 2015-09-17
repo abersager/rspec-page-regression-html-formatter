@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
-  s.authors = ["Oliver Spindler"]
+  s.authors = ["Kingsley Hendrickse", "Oliver Spindler"]
   s.date = "2015-09-17"
   s.description = "Custom HTML formatter for rspec-page-regression to allow visual comparison"
   s.email = "os@oliverspindler.com"
@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
     "README.md",
     "Rakefile",
     "VERSION",
+    "lib/rspec_page_regression_html_formatter.rb",
     "resources/bootstrap-3.2.0-dist/css/bootstrap-theme-yeti.min.css",
     "resources/bootstrap-3.2.0-dist/css/bootstrap.min.css",
     "resources/bootstrap-3.2.0-dist/fonts/glyphicons-halflings-regular.eot",
@@ -38,8 +39,7 @@ Gem::Specification.new do |s|
     "resources/bootstrap-3.2.0-dist/fonts/glyphicons-halflings-regular.woff",
     "resources/bootstrap-3.2.0-dist/js/bootstrap.min.js",
     "resources/jquery-1.11.1.min.js",
-    "resources/jscharts.js",
-    "rspec_html_formatter.gemspec",
+    "rspec_page_regression_html_formatter.gemspec",
     "spec/penders_spec.rb",
     "spec/rspec_html_formatter_spec.rb",
     "spec/test2_spec.rb",
@@ -58,6 +58,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rspec-core>, [">= 3.0.3"])
       s.add_runtime_dependency(%q<rouge>, [">= 1.6.1"])
       s.add_runtime_dependency(%q<activesupport>, [">= 4.1.4"])
+      s.add_runtime_dependency(%q<rspec-page-regression>, [">= 0"])
       s.add_development_dependency(%q<rspec>, ["~> 3.0.0"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0"])
@@ -66,6 +67,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rspec-core>, [">= 3.0.3"])
       s.add_dependency(%q<rouge>, [">= 1.6.1"])
       s.add_dependency(%q<activesupport>, [">= 4.1.4"])
+      s.add_dependency(%q<rspec-page-regression>, [">= 0"])
       s.add_dependency(%q<rspec>, ["~> 3.0.0"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_dependency(%q<bundler>, ["~> 1.0"])
@@ -75,6 +77,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<rspec-core>, [">= 3.0.3"])
     s.add_dependency(%q<rouge>, [">= 1.6.1"])
     s.add_dependency(%q<activesupport>, [">= 4.1.4"])
+    s.add_dependency(%q<rspec-page-regression>, [">= 0"])
     s.add_dependency(%q<rspec>, ["~> 3.0.0"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
     s.add_dependency(%q<bundler>, ["~> 1.0"])
