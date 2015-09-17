@@ -17,7 +17,6 @@
 
   <script src="resources/jquery-1.11.1.min.js"></script>
   <script src="resources/bootstrap-3.2.0-dist/js/bootstrap.min.js"></script>
-  <script src="resources/jscharts.js"></script>
   <style>
       * {
           font-size: 14px;
@@ -60,36 +59,6 @@
     <div class="col-lg-12">
       <p class="text-center" style="font-size:2em;"><%= @title %></p>
     </div>
-  </div>
-
-  <div class="row">
-
-    <div class="col-md-6">
-
-      <div class="panel panel-default">
-        <div class="panel-heading">Examples Summary</div>
-        <div class="panel-body">
-          <span class="pull-right label label-primary"><%= @examples.size %> Examples</span>
-
-          <div id="specification_summary">Loading chart...</div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="col-md-6">
-
-      <div class="panel panel-default">
-        <div class="panel-heading">Duration Summary</div>
-        <div class="panel-body">
-          <span class="pull-right label label-primary">Finished in <%= @summary_duration %></span>
-
-          <div id="duration_summary">Loading chart...</div>
-        </div>
-      </div>
-
-    </div>
-
   </div>
 
   <div class="row">
@@ -154,31 +123,6 @@
 </div>
 
 <script type="text/javascript">
-    var myChart = new JSChart('specification_summary', 'pie', '');
-    myChart.setDataArray([
-        ['Passed', <%= @passed %>],
-        ['Failed', <%= @failed %>],
-        ['Pending', <%= @pending %>]
-    ]);
-    myChart.colorize(['#8DC63F', '#ED1C24', '#F7941D']);
-    myChart.setSize(400, 300);
-    myChart.setPieRadius(95);
-    myChart.setTitle('');
-    myChart.setTitleColor('#505050');
-    myChart.setPieUnitsColor('#505050');
-    myChart.setPieValuesOffset(-15);
-    myChart.draw();
-
-    var myChart2 = new JSChart('duration_summary', 'line', '');
-    myChart2.setDataArray(<%= @durations %>);
-    myChart2.setSize(400, 300);
-    myChart2.setLineColor('#0070B8');
-    myChart2.setTitle('');
-    myChart2.setTitleFontSize(10);
-    myChart2.setAxisNameX('Examples');
-    myChart2.setAxisNameY('');
-    myChart2.setAxisValuesNumberX(1);
-    myChart2.draw();
 </script>
 
 
