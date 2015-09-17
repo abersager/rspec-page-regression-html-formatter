@@ -1,3 +1,4 @@
+require 'rspec/page-regression'
 require 'rspec/core/formatters/base_formatter'
 require 'active_support'
 require 'active_support/core_ext/numeric'
@@ -10,7 +11,7 @@ require 'rbconfig'
 I18n.enforce_available_locales = false
 
 class Oopsy
-  attr_reader :klass, :message, :backtrace, :highlighted_source, :explanation, :backtrace_message
+  attr_reader :klass, :message, :backtrace, :highlighted_source, :explanation, :backtrace_message, :visual_comparison, :baseline_message
 
   def initialize(exception, file_path)
     @exception = exception
@@ -22,6 +23,8 @@ class Oopsy
       @backtrace_message = @backtrace.select { |r| r.match(@file_path) }.join('').encode('utf-8')
       @highlighted_source = process_source
       @explanation = process_message
+      @visual_comparison = generate_visual_comparison
+      @baseline_message = generate_baseline_message(@visual_comparison)
     end
   end
 
@@ -63,7 +66,7 @@ def os
     formatter = Rouge::Formatters::HTML.new(css_class: 'highlight', line_numbers: true, start_line: start_line+1)
     lexer = Rouge::Lexers::Ruby.new
     formatter.format(lexer.lex(source.encode('utf-8')))
-    end 
+    end
   end
 
   def process_message
@@ -72,6 +75,25 @@ def os
     formatter.format(lexer.lex(@message))
   end
 
+  def generate_visual_comparison
+    return unless @message.match /Test image (?:does not match expected image|size [\dx]+ does not match expectation)/
+
+    paths = @message.scan /(?:tmp\/)?spec\/[^ ]+/
+    result = paths.map do |path|
+      key = path.match(/\/([a-z]+)\.png$/)[1]
+      [key, path]
+    end
+
+    result.to_h
+  end
+
+  def generate_baseline_message visual_comparison
+    return '' if visual_comparison.nil?
+    formatter = Rouge::Formatters::HTML.new(css_class: 'highlight')
+    lexer = Rouge::Lexers::Shell.new
+    message = "$ mv #{visual_comparison["test"]} #{visual_comparison["expected"]}"
+    formatter.format lexer.lex(message)
+  end
 end
 
 class Example
@@ -134,11 +156,9 @@ class Specify
   end
 end
 
-class RspecHtmlFormatter < RSpec::Core::Formatters::BaseFormatter
+class RspecPageRegressionHtmlFormatter < RSpec::Core::Formatters::BaseFormatter
 
   RSpec::Core::Formatters.register self, :example_started, :example_passed, :example_failed, :example_pending, :example_group_finished
-
-  REPORT_PATH = './rspec_html_reports'
 
   def initialize(io_standard_out)
     create_reports_dir
@@ -176,7 +196,7 @@ class RspecHtmlFormatter < RSpec::Core::Formatters::BaseFormatter
   end
 
   def example_group_finished(notification)
-    File.open("#{REPORT_PATH}/#{notification.group.description.parameterize}.html", 'w') do |f|
+    File.open("#{report_path}/#{notification.group.description.parameterize}.html", 'w') do |f|
 
       @passed = @group_example_success_count
       @failed = @group_example_failure_count
@@ -219,7 +239,7 @@ class RspecHtmlFormatter < RSpec::Core::Formatters::BaseFormatter
   end
 
   def close(notification)
-    File.open("#{REPORT_PATH}/overview.html", 'w') do |f|
+    File.open("#{report_path}/index.html", 'w') do |f|
       @overview = @all_groups
 
       @passed = @overview.values.map { |g| g[:passed].size }.inject(0) { |sum, i| sum + i }
@@ -239,23 +259,28 @@ class RspecHtmlFormatter < RSpec::Core::Formatters::BaseFormatter
       @total_examples = @passed + @failed + @pending
       template_file = File.read(File.dirname(__FILE__) + '/../templates/overview.erb')
       f.puts ERB.new(template_file).result(binding)
+      puts "Report available at #{File.expand_path(f)}"
     end
   end
 
-
   private
+
+  def report_path
+    File.join(RSpec.configuration.default_path, 'report')
+  end
+
   def create_reports_dir
-    FileUtils.rm_rf(REPORT_PATH) if File.exists?(REPORT_PATH)
-    FileUtils.mkpath(REPORT_PATH)
+    FileUtils.rm_rf(report_path) if File.exists?(report_path)
+    FileUtils.mkpath(report_path)
   end
 
   def create_resources_dir
-    file_path = REPORT_PATH + '/resources'
+    file_path = report_path + '/resources'
     FileUtils.mkdir_p file_path unless File.exists?(file_path)
   end
 
   def copy_resources
-    FileUtils.cp_r(File.dirname(__FILE__) + '/../resources', REPORT_PATH)
+    FileUtils.cp_r(File.dirname(__FILE__) + '/../resources', report_path)
   end
 
 end

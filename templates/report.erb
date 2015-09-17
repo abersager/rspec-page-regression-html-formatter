@@ -45,7 +45,7 @@
 
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li><a href="overview.html">Overview</a></li>
+                <li><a href="index.html">Overview</a></li>
               </ul>
             </div>
 
@@ -102,7 +102,39 @@
                         </div>
                         <div class="panel-body">
                           <%= example.exception.explanation %>
+                          <% if example.exception.visual_comparison %>
+                            <div class="visual-comparison">
+                              <table>
+                                <thead>
+                                  <th>Actual</th>
+                                  <% if example.exception.visual_comparison["difference"] %>
+                                    <th>Difference</th>
+                                  <% end %>
+                                  <th>Expected</th>
+                                </thead>
+                                <tbody>
+                                  <td><img src='../../<%= example.exception.visual_comparison["test"] %>'/></td>
+                                  <% if example.exception.visual_comparison["difference"] %>
+                                    <td><img src='../../<%= example.exception.visual_comparison["difference"] %>'/></td>
+                                  <% end %>
+                                  <td><img src='../../<%= example.exception.visual_comparison["expected"] %>'/></td>
+                                </tbody>
+                              </table>
+                            </div>
+
+                            <form class="baseline">
+                              <div class="form-group">
+                                <input type="checkbox" id="baseline-<%= example.full_description %>">
+                                <label for="baseline-<%= example.full_description %>">I have checked and this is the correct result</label>
+                                <div class="baseline-message bg-info">
+                                  <p>Set the new baseline:</p>
+                                  <%= example.exception.baseline_message %>
+                                </div>
+                              </div>
+                            </form>
+                          <% end %>
                           <h5><%= example.exception.backtrace_message %></h5>
+
                           <%= example.exception.highlighted_source %>
                         </div>
                       </div>
@@ -122,9 +154,51 @@
 
 </div>
 
+<style>
+  div.visual-comparison {
+    cursor: zoom-in;
+    margin-bottom: 0.5em;
+  }
+  div.visual-comparison.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    background: white;
+    cursor: zoom-out;
+  }
+  div.visual-comparison img {
+    width: 100%;
+  }
+  div.visual-comparison.expanded img {
+    width: auto;
+  }
+  div.visual-comparison td {
+    vertical-align: top;
+  }
+  form.baseline label {
+    font-size: 14px;
+  }
+  form.baseline .baseline-message {
+    display: none;
+    padding: 0.5em;
+  }
+  form.baseline.expanded .baseline-message {
+    display: block;
+  }
+</style>
 <script type="text/javascript">
+  $(function () {
+    $('div.visual-comparison').on('click', function () {
+      $(this).toggleClass('expanded');
+    });
+    $('form.baseline input[type=checkbox]').on('change', function () {
+      $(this).parents('form').toggleClass('expanded', $(this).prop('checked'));
+    });
+  });
 </script>
-
 
 </body>
 </html>
