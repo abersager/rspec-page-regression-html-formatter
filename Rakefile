@@ -14,7 +14,7 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
-  gem.name = "rspec_page_regression_html_formatter"
+  gem.name = "rspec-page-regression-html-formatter"
   gem.homepage = "https://github.com/abersager/rspec-page-regression-html-formatter"
   gem.license = "MIT"
   gem.summary = %Q{Custom HTML formatter for rspec-page-regression to allow visual comparison}
@@ -44,7 +44,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "rspec_page_regression_html_formatter #{version}"
+  rdoc.title = "rspec-page-regression-html-formatter #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
